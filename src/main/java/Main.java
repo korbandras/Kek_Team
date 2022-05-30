@@ -17,10 +17,11 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import java.awt.*;
+import javax.swing.*;
 
 import static java.lang.System.out;
 
-public class Main
+public class Main extends JFrame
 {
 
     private static final Scanner be = new Scanner(System.in);

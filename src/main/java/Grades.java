@@ -35,9 +35,6 @@ public class Grades {
     }
     @Override
     public String toString() {
-        return "Semester{" +
-                "subject='" + Subject + '\'' +
-                ", grade=" + Grade +
-                ", credit='" + Credit + '}' + "\r\n";
+        return "Subject = " + Subject + ", grade = " + Grade + ", credit = " + Credit + "\n";
     }
 }

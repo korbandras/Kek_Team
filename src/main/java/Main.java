@@ -21,7 +21,7 @@ import javax.swing.*;
 
 import static java.lang.System.out;
 
-public class Main extends JFrame
+public class Main
 {
 
     private static final Scanner be = new Scanner(System.in);

@@ -15,8 +15,6 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.UnaryOperator;
 
 import static java.lang.System.out;
 import static javax.swing.JOptionPane.showInputDialog;
@@ -24,14 +22,13 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 public class Main1 {
 
-    private static final Scanner be = new Scanner(System.in);
+    //private static final Scanner be = new Scanner(System.in);
     private static final String file = "src/main/resources/grades.xml";
 
     private static final JFrame frame = new JFrame("Átlag és KKI számoló");
 
     public static void main(String[] args) {
-        AtomicReference<ArrayList<Grades>> grades = new AtomicReference<>(new ArrayList<>());
-
+        ArrayList<Grades> grades = read(file, frame);
         JMenuBar mb = new JMenuBar();
         JMenu file0 = new JMenu("Fájl");
 
@@ -58,12 +55,11 @@ public class Main1 {
         file0.add(save=new JMenuItem("Save"));
 
         open.addActionListener(e -> {
-            grades.set(read(file, frame));
-            //showMessageDialog(frame, grades);
+            showMessageDialog(frame, "Read completed in the beginning.");
         });
 
         save.addActionListener(e ->{
-            saveGradestoXML(grades.get(), file);
+            saveGradestoXML(grades, file);
         });
 
         list.addActionListener(e->{
@@ -72,11 +68,11 @@ public class Main1 {
 
         add.addActionListener(e->{
             Grades newgrade = new Grades(inputSub(), inputCrd(), inputGrd());
-            //grades.
+            grades.add(newgrade);
         });
 
         modify.addActionListener(e->{
-            //modifygrades(frame, grades);
+            modifygrades(frame, grades);
         });
 
         atlag.addActionListener(e->{
@@ -84,12 +80,13 @@ public class Main1 {
         });
 
         kki.addActionListener(e->{
-
+            kkiszam(frame, grades);
         });
         delete.addActionListener(e->{
             deleteGrade(frame, grades);
         });
         exit.addActionListener(e -> System.exit(0));
+
         frame.setJMenuBar(mb);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -97,8 +94,142 @@ public class Main1 {
         frame.setLocationRelativeTo(null);
         frame.setResizable(true);
     }
-    private static void deleteGrade(JFrame frame, ArrayList<Grades> grades)
-    {
+
+    private static void kkiszam(JFrame frame, ArrayList<Grades> grades) {
+        double kki, devider = 30;
+        kki = (sumOfDoneTimesGrade()/devider)*(DoneCrd()/UnderTook());
+        showMessageDialog(frame, "Your KKI based on Grades.xml is: " + kki);
+    }
+    private static double UnderTook() {
+        double undertook = 0;
+        try {
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            Document document = documentBuilder.parse(file);
+
+            Element rootElement = document.getDocumentElement();
+            NodeList childNodeList = rootElement.getChildNodes();
+            Node node;
+
+            for(int i = 0; i < childNodeList.getLength(); i++)
+            {
+                node = childNodeList.item(i);
+
+                if(node.getNodeType() == Node.ELEMENT_NODE)
+                {
+                    NodeList childNodesOfGradesTag = node.getChildNodes();
+                    String crd ="";
+                    for(int j = 0; j < childNodesOfGradesTag.getLength(); j++)
+                    {
+                        Node childNodeOfGradesTag = childNodesOfGradesTag.item(j);
+                        if(childNodeOfGradesTag.getNodeType() == Node.ELEMENT_NODE)
+                        {
+                            if (childNodeOfGradesTag.getNodeName().equals("Credit"))
+                            {
+                                crd = childNodeOfGradesTag.getTextContent();
+                            }
+                        }
+                    }
+                    undertook = undertook + Integer.parseInt(crd);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return undertook;
+    }
+    private static double DoneCrd() {
+        double done = 0;
+        try {
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            Document document = documentBuilder.parse(file);
+
+            Element rootElement = document.getDocumentElement();
+            NodeList childNodeList = rootElement.getChildNodes();
+            Node node;
+
+            for(int i = 0; i < childNodeList.getLength(); i++) {
+                node = childNodeList.item(i);
+
+                if(node.getNodeType() == Node.ELEMENT_NODE) {
+                    NodeList childNodesOfGradesTag = node.getChildNodes();
+                    String grd ="", crd ="";
+                    for(int j = 0; j < childNodesOfGradesTag.getLength(); j++) {
+                        Node childNodeOfGradesTag = childNodesOfGradesTag.item(j);
+                        if(childNodeOfGradesTag.getNodeType() == Node.ELEMENT_NODE) {
+                            switch (childNodeOfGradesTag.getNodeName()) {
+                                case "Grade" -> grd = childNodeOfGradesTag.getTextContent();
+                                case "Credit" -> crd = childNodeOfGradesTag.getTextContent();
+                            }
+                        }
+                    }
+
+                    if(Integer.parseInt(grd) != 1) {
+                        done = done + Integer.parseInt(crd);
+                    }
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return done;
+    }
+    private static double sumOfDoneTimesGrade() {
+        double sum = 0;
+        try {
+            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            Document document = documentBuilder.parse(file);
+
+            Element rootElement = document.getDocumentElement();
+            NodeList childNodeList = rootElement.getChildNodes();
+            Node node;
+
+            for(int i = 0; i < childNodeList.getLength(); i++) {
+                node = childNodeList.item(i);
+
+                if(node.getNodeType() == Node.ELEMENT_NODE) {
+                    NodeList childNodesOfGradesTag = node.getChildNodes();
+                    String grd ="", crd ="";
+                    for(int j = 0; j < childNodesOfGradesTag.getLength(); j++) {
+                        Node childNodeOfGradesTag = childNodesOfGradesTag.item(j);
+                        if(childNodeOfGradesTag.getNodeType() == Node.ELEMENT_NODE) {
+                            switch (childNodeOfGradesTag.getNodeName()){
+                                case "Grade" -> grd = childNodeOfGradesTag.getTextContent();
+                                case "Credit" -> crd = childNodeOfGradesTag.getTextContent();
+                            }
+                        }
+                    }
+
+                    sum = sum + Integer.parseInt(grd)*Integer.parseInt(crd);
+                }
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sum;
+    }
+    private static void modifygrades(JFrame frame, ArrayList<Grades> grades) {
+        {
+            String subj = JOptionPane.showInputDialog("Subject you want to modify: ");
+            try
+            {
+                Grades grades1 = findGrade(grades, subj);
+                grades.set(grades.indexOf(grades1), new Grades(grades1.getSubject(), inputCrd(), inputGrd()));
+                showMessageDialog(frame, "Subject changed.");
+            }
+            catch (IllegalArgumentException e)
+            {
+                showMessageDialog(frame,e.getMessage());
+            }
+        }
+    }
+    private static void deleteGrade(JFrame frame, ArrayList<Grades> grades) {
         String name = JOptionPane.showInputDialog("Subject you want to delete: ");
         try
         {
@@ -110,12 +241,9 @@ public class Main1 {
             showMessageDialog(frame, e.getMessage());
         }
     }
-    private static Grades findGrade(ArrayList<Grades> grade, String sub) throws IllegalArgumentException
-    {
-        for(Grades grades : grade)
-        {
-            if(grades.getSubject().equals(sub))
-            {
+    private static Grades findGrade(ArrayList<Grades> grade, String sub) throws IllegalArgumentException {
+        for(Grades grades : grade) {
+            if(grades.getSubject().equals(sub)) {
                 return grades;
             }
         }
@@ -127,8 +255,7 @@ public class Main1 {
     }
     private static double gradesSum() {
         double sum = 0;
-        try
-        {
+        try {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = documentBuilder.parse(file);
@@ -137,21 +264,16 @@ public class Main1 {
             NodeList childNodeList = rootElement.getChildNodes();
             Node node;
 
-            for(int i = 0; i < childNodeList.getLength(); i++)
-            {
+            for(int i = 0; i < childNodeList.getLength(); i++) {
                 node = childNodeList.item(i);
 
-                if(node.getNodeType() == Node.ELEMENT_NODE)
-                {
+                if(node.getNodeType() == Node.ELEMENT_NODE) {
                     NodeList childNodesOfGradesTag = node.getChildNodes();
                     String grd ="";
-                    for(int j = 0; j < childNodesOfGradesTag.getLength(); j++)
-                    {
+                    for(int j = 0; j < childNodesOfGradesTag.getLength(); j++) {
                         Node childNodeOfGradesTag = childNodesOfGradesTag.item(j);
-                        if(childNodeOfGradesTag.getNodeType() == Node.ELEMENT_NODE)
-                        {
-                            if (childNodeOfGradesTag.getNodeName().equals("Grade"))
-                            {
+                        if(childNodeOfGradesTag.getNodeType() == Node.ELEMENT_NODE) {
+                            if (childNodeOfGradesTag.getNodeName().equals("Grade")) {
                                 grd = childNodeOfGradesTag.getTextContent();
                             }
                         }
@@ -160,16 +282,14 @@ public class Main1 {
                 }
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
         return sum;
     }
     private static double gradesNo() {
         double No = 0;
-        try
-        {
+        try {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = documentBuilder.parse(file);
@@ -178,20 +298,15 @@ public class Main1 {
             NodeList childNodeList = rootElement.getChildNodes();
             Node node;
 
-            for(int i = 0; i < childNodeList.getLength(); i++)
-            {
+            for(int i = 0; i < childNodeList.getLength(); i++) {
                 node = childNodeList.item(i);
 
-                if(node.getNodeType() == Node.ELEMENT_NODE)
-                {
+                if(node.getNodeType() == Node.ELEMENT_NODE) {
                     NodeList childNodesOfGradesTag = node.getChildNodes();
-                    for(int j = 0; j < childNodesOfGradesTag.getLength(); j++)
-                    {
+                    for(int j = 0; j < childNodesOfGradesTag.getLength(); j++) {
                         Node childNodeOfGradesTag = childNodesOfGradesTag.item(j);
-                        if(childNodeOfGradesTag.getNodeType() == Node.ELEMENT_NODE)
-                        {
-                            if (childNodeOfGradesTag.getNodeName().equals("Grade"))
-                            {
+                        if(childNodeOfGradesTag.getNodeType() == Node.ELEMENT_NODE) {
+                            if (childNodeOfGradesTag.getNodeName().equals("Grade")) {
                                 No++;
                             }
                         }
@@ -199,16 +314,14 @@ public class Main1 {
                 }
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
         return No;
     }
     private static ArrayList<Grades> read(String file0, JFrame frame) {
         ArrayList<Grades> grade = new ArrayList<>();
-        try
-        {
+        try {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = documentBuilder.parse(file0);
@@ -217,19 +330,15 @@ public class Main1 {
             NodeList childNodeList = rootElement.getChildNodes();
             Node node;
 
-            for(int i = 0; i < childNodeList.getLength(); i++)
-            {
+            for(int i = 0; i < childNodeList.getLength(); i++) {
                 node = childNodeList.item(i);
 
-                if(node.getNodeType() == Node.ELEMENT_NODE)
-                {
+                if(node.getNodeType() == Node.ELEMENT_NODE) {
                     NodeList childNodesOfGradesTag = node.getChildNodes();
                     String sub = "", crd = "", grd ="";
-                    for(int j = 0; j < childNodesOfGradesTag.getLength(); j++)
-                    {
+                    for(int j = 0; j < childNodesOfGradesTag.getLength(); j++) {
                         Node childNodeOfGradesTag = childNodesOfGradesTag.item(j);
-                        if(childNodeOfGradesTag.getNodeType() == Node.ELEMENT_NODE)
-                        {
+                        if(childNodeOfGradesTag.getNodeType() == Node.ELEMENT_NODE) {
                             switch (childNodeOfGradesTag.getNodeName()){
                                 case "Subject" -> sub = childNodeOfGradesTag.getTextContent();
                                 case "Credit" -> crd = childNodeOfGradesTag.getTextContent();
@@ -242,8 +351,7 @@ public class Main1 {
                 }
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
         //showMessageDialog(frame, grade);

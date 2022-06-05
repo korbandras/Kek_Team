@@ -1,3 +1,4 @@
+/*
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -45,12 +46,12 @@ public class Main2 {
         file0.add(save=new JMenuItem("Save"));
 
         open.addActionListener(e -> {
-            Grades grade1 = grades.set(read(file, frame));
+            //Grades grade1 = grades.set(read(file, frame));
             //showMessageDialog(frame, grades);
         });
 
         save.addActionListener(e ->{
-            saveGradestoXML(grades.get(), file);
+            //saveGradestoXML(grades.get(), file);
         });
 
         list.addActionListener(e->{
@@ -151,3 +152,4 @@ public class Main2 {
 
     }
 }
+*/

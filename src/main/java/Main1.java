@@ -54,6 +54,10 @@ public class Main1 {
         file0.add(open=new JMenuItem("Open"));
         file0.add(save=new JMenuItem("Save"));
 
+        mb.add(new JMenuItem(""));
+        mb.add(new JMenuItem(""));
+        mb.add(new JMenuItem(""));
+
         open.addActionListener(e -> {
             showMessageDialog(frame, "Read completed in the beginning.");
         });
@@ -80,7 +84,7 @@ public class Main1 {
         });
 
         kki.addActionListener(e->{
-            kkiszam(frame, grades);
+            kkiszam(frame);
         });
         delete.addActionListener(e->{
             deleteGrade(frame, grades);
@@ -92,10 +96,10 @@ public class Main1 {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 500);
         frame.setLocationRelativeTo(null);
-        frame.setResizable(true);
+        frame.setResizable(false);
     }
 
-    private static void kkiszam(JFrame frame, ArrayList<Grades> grades) {
+    private static void kkiszam(JFrame frame) {
         double kki, devider = 30;
         kki = (sumOfDoneTimesGrade()/devider)*(DoneCrd()/UnderTook());
         showMessageDialog(frame, "Your KKI based on Grades.xml is: " + kki);

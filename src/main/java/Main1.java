@@ -104,6 +104,7 @@ public class Main1 {
         kki = (sumOfDoneTimesGrade()/devider)*(DoneCrd()/UnderTook());
         showMessageDialog(frame, "Your KKI based on Grades.xml is: " + kki);
     }
+
     private static double UnderTook() {
         double undertook = 0;
         try {
@@ -115,21 +116,16 @@ public class Main1 {
             NodeList childNodeList = rootElement.getChildNodes();
             Node node;
 
-            for(int i = 0; i < childNodeList.getLength(); i++)
-            {
+            for(int i = 0; i < childNodeList.getLength(); i++) {
                 node = childNodeList.item(i);
 
-                if(node.getNodeType() == Node.ELEMENT_NODE)
-                {
+                if(node.getNodeType() == Node.ELEMENT_NODE) {
                     NodeList childNodesOfGradesTag = node.getChildNodes();
                     String crd ="";
-                    for(int j = 0; j < childNodesOfGradesTag.getLength(); j++)
-                    {
+                    for(int j = 0; j < childNodesOfGradesTag.getLength(); j++) {
                         Node childNodeOfGradesTag = childNodesOfGradesTag.item(j);
-                        if(childNodeOfGradesTag.getNodeType() == Node.ELEMENT_NODE)
-                        {
-                            if (childNodeOfGradesTag.getNodeName().equals("Credit"))
-                            {
+                        if(childNodeOfGradesTag.getNodeType() == Node.ELEMENT_NODE) {
+                            if (childNodeOfGradesTag.getNodeName().equals("Credit")) {
                                 crd = childNodeOfGradesTag.getTextContent();
                             }
                         }
@@ -138,12 +134,12 @@ public class Main1 {
                 }
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
         return undertook;
     }
+
     private static double DoneCrd() {
         double done = 0;
         try {
@@ -182,6 +178,7 @@ public class Main1 {
         }
         return done;
     }
+
     private static double sumOfDoneTimesGrade() {
         double sum = 0;
         try {
@@ -218,33 +215,30 @@ public class Main1 {
         }
         return sum;
     }
+
     private static void modifygrades(JFrame frame, ArrayList<Grades> grades) {
-        {
-            String subj = JOptionPane.showInputDialog("Subject you want to modify: ");
-            try
-            {
-                Grades grades1 = findGrade(grades, subj);
-                grades.set(grades.indexOf(grades1), new Grades(grades1.getSubject(), inputCrd(), inputGrd()));
-                showMessageDialog(frame, "Subject changed.");
-            }
-            catch (IllegalArgumentException e)
-            {
-                showMessageDialog(frame,e.getMessage());
-            }
+        String subj = JOptionPane.showInputDialog("Subject you want to modify: ");
+        try {
+            Grades grades1 = findGrade(grades, subj);
+            grades.set(grades.indexOf(grades1), new Grades(grades1.getSubject(), inputCrd(), inputGrd()));
+            showMessageDialog(frame, "Subject changed.");
+        }
+        catch (IllegalArgumentException e) {
+            showMessageDialog(frame,e.getMessage());
         }
     }
+
     private static void deleteGrade(JFrame frame, ArrayList<Grades> grades) {
         String name = JOptionPane.showInputDialog("Subject you want to delete: ");
-        try
-        {
+        try {
             grades.remove(findGrade(grades, name));
             showMessageDialog(frame, "Subject deleted.");
         }
-        catch (IllegalArgumentException e)
-        {
+        catch (IllegalArgumentException e) {
             showMessageDialog(frame, e.getMessage());
         }
     }
+
     private static Grades findGrade(ArrayList<Grades> grade, String sub) throws IllegalArgumentException {
         for(Grades grades : grade) {
             if(grades.getSubject().equals(sub)) {
@@ -257,6 +251,7 @@ public class Main1 {
         double avg = gradesSum()/gradesNo();
         showMessageDialog(frame,"Average of the grades: " + avg);
     }
+
     private static double gradesSum() {
         double sum = 0;
         try {
@@ -291,6 +286,7 @@ public class Main1 {
         }
         return sum;
     }
+
     private static double gradesNo() {
         double No = 0;
         try {
@@ -323,6 +319,7 @@ public class Main1 {
         }
         return No;
     }
+
     private static ArrayList<Grades> read(String file0, JFrame frame) {
         ArrayList<Grades> grade = new ArrayList<>();
         try {
@@ -362,6 +359,7 @@ public class Main1 {
         showMessageDialog(frame,"Read complete!");
         return grade;
     }
+
     private static void saveGradestoXML(ArrayList<Grades> grade, String filepath1) {
         try {
             Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
@@ -385,11 +383,13 @@ public class Main1 {
             e.printStackTrace();
         }
     }
+
     private static void childElement(Document document, Element par, String tag, String text) {
         Element element = document.createElement(tag);
         element.setTextContent(text);
         par.appendChild(element);
     }
+
     private static int inputGrd() {
         int grd = 0;
         while(grd < 1 || grd > 5) {
@@ -404,6 +404,7 @@ public class Main1 {
         }
         return grd;
     }
+
     private static int inputCrd() {
         int crd = Integer.parseInt(JOptionPane.showInputDialog("Enter credit value of new subject: "));
         while(crd < 0 || crd > 9) {
@@ -411,6 +412,7 @@ public class Main1 {
         }
         return crd;
     }
+
     private static String inputSub() {
         String sub = JOptionPane.showInputDialog("Name of new subject: ");
         return sub;

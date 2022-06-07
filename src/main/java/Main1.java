@@ -248,8 +248,14 @@ public class Main1 {
         throw new IllegalArgumentException("No subject with given name: " + sub);
     }
     private static void avg(JFrame frame) {
-        double avg = gradesSum()/gradesNo();
-        showMessageDialog(frame,"Average of the grades: " + avg);
+        double avg = gradesSum() / gradesNo();
+        showMessageDialog(frame, "Average of the grades: " + avg);
+        PassOrNot pass;
+        if (avg > 2) {
+            pass = PassOrNot.Pass;
+        } else {
+            pass = PassOrNot.DidntPass;
+        }
     }
 
     private static double gradesSum() {

@@ -11,6 +11,9 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -29,6 +32,94 @@ public class Main1 {
 
     public static void main(String[] args) {
         ArrayList<Grades> grades = read(file, frame);
+
+        JPanel panel = new JPanel();
+        panel.setBounds(new Rectangle());
+        panel.setBackground(Color.GRAY);
+
+        JButton button1 = new JButton("List Subjects and Grades");
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showMessageDialog(frame, grades);
+            }
+        });
+
+        JButton button2 = new JButton("Add new subject");
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Grades newgrade = new Grades(inputSub(), inputCrd(), inputGrd());
+                grades.add(newgrade);
+            }
+        });
+
+        JButton button3 = new JButton("Modify subject");
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                modifygrades(frame, grades);
+            }
+        });
+
+        JButton button4 = new JButton("Delete subject");
+        button4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteGrade(frame, grades);
+            }
+        });
+
+        JButton button5 = new JButton("Average Calculator");
+        button5.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                avg(frame);
+            }
+        });
+
+        JButton button6 = new JButton("KKI Calculator");
+        button6.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                kkiszam(frame);
+            }
+        });
+
+        JButton button7 = new JButton("Exit");
+        button7.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
+        button1.setBackground(Color.WHITE);
+        button2.setBackground(Color.WHITE);
+        button3.setBackground(Color.WHITE);
+        button4.setBackground(Color.WHITE);
+        button5.setBackground(Color.WHITE);
+        button6.setBackground(Color.WHITE);
+        button7.setBackground(Color.WHITE);
+
+        button1.setBounds(50,100,50,30);
+        button2.setBounds(100,100,50,30);
+        button3.setBounds(150,100,50,30);
+        button4.setBounds(200,100,50,30);
+        button5.setBounds(250,100,50,30);
+        button6.setBounds(300,100,50,30);
+        button7.setBounds(350,100,50,30);
+
+        panel.add(button1);
+        panel.add(button2);
+        panel.add(button3);
+        panel.add(button4);
+        panel.add(button5);
+        panel.add(button6);
+        panel.add(button7);
+
+        frame.add(panel);
+
         JMenuBar mb = new JMenuBar();
         JMenu file0 = new JMenu("Fájl");
 
@@ -86,15 +177,17 @@ public class Main1 {
         kki.addActionListener(e->{
             kkiszam(frame);
         });
+
         delete.addActionListener(e->{
             deleteGrade(frame, grades);
         });
+
         exit.addActionListener(e -> System.exit(0));
 
         frame.setJMenuBar(mb);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 500);
+        frame.setSize(500, 150);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
     }
@@ -247,6 +340,7 @@ public class Main1 {
         }
         throw new IllegalArgumentException("No subject with given name: " + sub);
     }
+
     private static void avg(JFrame frame) {
         double avg = gradesSum() / gradesNo();
         showMessageDialog(frame, "Average of the grades: " + avg);

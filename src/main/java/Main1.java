@@ -35,7 +35,7 @@ public class Main1 {
 
         JPanel panel = new JPanel();
         panel.setBounds(new Rectangle());
-        panel.setBackground(Color.GRAY);
+        panel.setBackground(Color.LIGHT_GRAY);
 
         JButton button1 = new JButton("List Subjects and Grades");
         button1.addActionListener(new ActionListener() {
@@ -450,7 +450,7 @@ public class Main1 {
             e.printStackTrace();
         }
         //showMessageDialog(frame, grade);
-        showMessageDialog(frame,"Read complete!");
+        //showMessageDialog(frame,"Read complete!");
         return grade;
     }
 

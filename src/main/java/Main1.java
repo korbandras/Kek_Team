@@ -54,7 +54,15 @@ public class Main1 {
         button2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Grades newgrade = new Grades(inputSub(), inputCrd(), inputGrd());
+                int grd = inputGrd();
+                String pn;
+                if (grd > 1){
+                    pn = "Pass";
+                }
+                else{
+                    pn = "DidntPass";
+                }
+                Grades newgrade = new Grades(inputSub(), inputCrd(), grd, PassOrNot.valueOf(pn));
                 grades.add(newgrade);
             }
         });
@@ -95,6 +103,7 @@ public class Main1 {
         button7.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                saveGradestoXML(grades, file);
                 System.exit(0);
             }
         });
@@ -179,7 +188,15 @@ public class Main1 {
         });
 
         add.addActionListener(e->{
-            grades.add(new Grades(inputSub(), inputCrd(), inputGrd()));
+            int grd = inputGrd();
+            String pn;
+            if (grd > 1){
+                pn = "Pass";
+            }
+            else{
+                pn = "DidntPass";
+            }
+            grades.add(new Grades(inputSub(), inputCrd(), grd, PassOrNot.valueOf(pn)));
         });
 
         modify.addActionListener(e->{
@@ -198,7 +215,10 @@ public class Main1 {
             deleteGrade(frame, grades);
         });
 
-        exit.addActionListener(e -> System.exit(0));
+        exit.addActionListener(e ->{
+            saveGradestoXML(grades, file);
+            System.exit(0);
+        });
 
         /**
          * Final touches on the frame, adding the
@@ -359,13 +379,34 @@ public class Main1 {
         String subj = JOptionPane.showInputDialog("Subject you want to modify: ");
         try {
             Grades grades1 = findGrade(grades, subj);
-            grades.set(grades.indexOf(grades1), new Grades(grades1.getSubject(), inputCrd(), inputGrd()));
+            int grd = inputGrd();
+            String pn;
+            if (grd > 1){
+                pn = "Pass";
+            }
+            else{
+                pn = "DidntPass";
+            }
+            grades.set(grades.indexOf(grades1), new Grades(grades1.getSubject(), inputCrd(), grd, PassOrNot.valueOf(pn)));
             showMessageDialog(frame, "Subject changed.");
         }
         catch (IllegalArgumentException e) {
             showMessageDialog(frame,e.getMessage());
         }
     }
+
+    /*
+    private static String passornot() {
+        String pn;
+        if (inputGrd() > 1){
+            pn = "Pass";
+        }
+        else{
+            pn = "DidntPass";
+        }
+        return pn;
+    }
+     */
 
     /**
      * The part of the program which deletes the given subject
@@ -510,7 +551,7 @@ public class Main1 {
 
                 if(node.getNodeType() == Node.ELEMENT_NODE) {
                     NodeList childNodesOfGradesTag = node.getChildNodes();
-                    String sub = "", crd = "", grd ="";
+                    String sub = "", crd = "", grd ="", pn = "";
                     for(int j = 0; j < childNodesOfGradesTag.getLength(); j++) {
                         Node childNodeOfGradesTag = childNodesOfGradesTag.item(j);
                         if(childNodeOfGradesTag.getNodeType() == Node.ELEMENT_NODE) {
@@ -518,10 +559,11 @@ public class Main1 {
                                 case "Subject" -> sub = childNodeOfGradesTag.getTextContent();
                                 case "Credit" -> crd = childNodeOfGradesTag.getTextContent();
                                 case "Grade" -> grd = childNodeOfGradesTag.getTextContent();
+                                case "Pass-Didnt" -> pn = childNodeOfGradesTag.getTextContent();
                             }
                         }
                     }
-                    grade.add(new Grades(sub, Integer.parseInt(crd), Integer.parseInt(grd)));
+                    grade.add(new Grades(sub, Integer.parseInt(crd), Integer.parseInt(grd), PassOrNot.valueOf(pn)));
                     //out.println(grade);
                 }
             }
@@ -592,13 +634,6 @@ public class Main1 {
             } catch (InputMismatchException e) {
                 showMessageDialog(frame, "Grade must be a number");
             }
-        }
-        PassOrNot pass;
-        if(grd != 1){
-             pass = PassOrNot.Pass;
-        }
-        else{
-            pass = PassOrNot.DidntPass;
         }
         return grd;
     }

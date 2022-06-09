@@ -4,7 +4,7 @@ public class Grades {
     private int Grade;
     private PassOrNot passOrNot;
 
-    public Grades(String Subject, int Credit, int Grade/*, PassOrNot passOrNot*/) {
+    public Grades(String Subject, int Credit, int Grade, PassOrNot passOrNot) {
         this.Subject = Subject;
         this.Credit = Credit;
         this.Grade = Grade;

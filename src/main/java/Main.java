@@ -1,3 +1,4 @@
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -23,14 +24,14 @@ import static java.lang.System.out;
 
 public class Main
 {
-
+/*
     private static final Scanner be = new Scanner(System.in);
     private static final String file = "src/main/resources/grades.xml";
 
-    /**
+
      * The main where file components are called,
      * such as menu, where most of the program is.
-     */
+
     public static void main(String[] args)
     {
         ArrayList<Grades> grades = readGradesFromXMLwithoutPrint(file);
@@ -38,12 +39,12 @@ public class Main
         //out.println(grades);
     }
 
-    /**
+
      * Menu sub-program, this calls the rest of the operations, not including the
      * first reading of the xml file. Here you can choose the action you want, or
      * exit the program. After every action, the program updates the original file,
      * thanks to saveGradesToXML.
-     */
+
     private static void menu(ArrayList<Grades> grades)
     {
         int choice = 0;
@@ -62,7 +63,7 @@ public class Main
             be.nextLine();
             switch (choice)
             {
-                case 1 -> listGrades(/*grades*/);
+                case 1 -> listGrades(grades);
                 case 2 -> addNewGrade(grades);
                 case 3 -> modifyGrade(grades);
                 case 4 -> deleteGrade(grades);
@@ -73,10 +74,10 @@ public class Main
         }
     }
 
-    /**
+
      * This component calculates the KKI based on a formula.
      * (∑(grade*credit) devided by 30) then multiplied by (completed credit devided by all credit you undertook)
-     */
+
     private static void kki()
     {
         double kki, devider = 30;
@@ -88,10 +89,10 @@ public class Main
         out.println();
     }
 
-    /**
+
      * This helps the KKI(), return the amount of credit
      * you had, not regarding the incompleteness.
-     */
+
     private static double UnderTook()
     {
         double undertook = 0;
@@ -135,10 +136,10 @@ public class Main
         return undertook;
     }
 
-    /**
+
      * This helps the KKI(), return the amount of credit you had,
      * but only those credit count, which is for a subject you completed.
-     */
+
     private static double DoneCrd()
     {
         double done = 0;
@@ -187,10 +188,10 @@ public class Main
         return done;
     }
 
-    /**
+
      * This is the last sub-program, which is helping KKI(), this returns the
      * final component to the formula, the sum of credit times grade
-     */
+
     private static double sumOfDoneTimesGrade()
     {
         double sum = 0;
@@ -235,21 +236,21 @@ public class Main
         return sum;
     }
 
-    /**
+
      * Returns the average of your grades.
-     */
-    private static void avg(/*ArrayList<Grades> grades*/)
+
+    private static void avg(/*ArrayList<Grades> grades)
     {
-        double avg = gradesSum(/*grades*/)/gradesNo(/*grades*/);
+        double avg = gradesSum(/*grades)/gradesNo(/*grades);
         //out.println(gradesSum(grades));
         //out.println(gradesNo(grades));
         out.printf("Average of the grades: %.2f\r\n", avg);
         out.println();
     }
 
-    /**
+
      * Sub-program of avg(), returns the number of grades you have in the grades.xml
-     */
+
     private static double gradesNo()
     {
         double No = 0;
@@ -291,9 +292,9 @@ public class Main
         return No;
     }
 
-    /**
+
      * Sub-program of avg(), returns the sum of your grades.
-     */
+
     private static double gradesSum()
     {
         double sum = 0;
@@ -337,9 +338,9 @@ public class Main
         return sum;
     }
 
-    /**
+
      * Deletes the subject of your choice, as long as you know the name of the subject.
-     */
+
     private static void deleteGrade(ArrayList<Grades> grades)
     {
         out.print("Subject you want to delete: ");
@@ -356,9 +357,9 @@ public class Main
         }
     }
 
-    /**
+
      * Modifies the grade and credit value of the subject of your choosing.
-     */
+
     private static void modifyGrade(ArrayList<Grades> grades)
     {
         out.print("Subject you want to modify: ");
@@ -376,11 +377,11 @@ public class Main
         }
     }
 
-    /**
+
      * Pinpoints the subject you are looking for, and helps the two programs above,
      * this gives them the subject to delete or modify. If no such subject is in the
      * grades.xml, will return with an error.
-     */
+
     private static Grades findGrade(ArrayList<Grades> grade, String sub) throws IllegalArgumentException
     {
         for(Grades grades : grade)
@@ -393,9 +394,9 @@ public class Main
         throw new IllegalArgumentException("No subject with given name: " + sub);
     }
 
-    /**
+
      * Adds a new grade, needs 3 sub-programs.
-     */
+
     private static void addNewGrade(ArrayList<Grades> grades)
     {
         grades.add(new Grades(inputSub(), inputCrd(), inputGrd()));
@@ -403,10 +404,10 @@ public class Main
         out.println();
     }
 
-    /**
+
      * Sub-program of addNewGrade(), this adds the grade, makes sure
      * it is an integer between 1 and 5, else gives an error message.
-     */
+
     private static int inputGrd()
     {
         int grd = 0;
@@ -428,11 +429,11 @@ public class Main
         return grd;
     }
 
-    /**
+
      * Sub-program of addNewGrade(), this adds the credit value,
      * makes sure it is an integer between 0 and 9, maximum and
      * minimum credit values on PTE.
-     */
+
     private static int inputCrd()
     {
         int crd;
@@ -446,9 +447,9 @@ public class Main
         return crd;
     }
 
-    /**
+
      * Sub-program of addNewGrade(), this adds the name of the subject.
-     */
+
     private static String inputSub()
     {
         String sub;
@@ -457,19 +458,12 @@ public class Main
         return sub;
     }
 
-    /**
-     * Lists grades right from reading the XML. Uses a modified version of the reader.
-     */
-    private static void listGrades(/*ArrayList<Grades> grades*/)
-    {
-        readGradesFromXMLwithPrint(file);
-        out.println();
-        //out.println(grades);
-    }
 
-    /**
-     * Modified version of reader to print out the content.
-     */
+     * Lists grades right from reading the XML. Uses a modified version of the reader.
+
+
+
+
     private static void readGradesFromXMLwithPrint(String filepath1)
     {
         ArrayList<Grades> grade = new ArrayList<>();
@@ -519,10 +513,10 @@ public class Main
         }
     }
 
-    /**
+
      * Original reader, this is the base of the modified
      * version, reads the contents of the XML file.
-     */
+
     private static ArrayList<Grades> readGradesFromXMLwithoutPrint(String filepath1)
     {
         ArrayList<Grades> grade = new ArrayList<>();
@@ -568,10 +562,10 @@ public class Main
         return grade;
     }
 
-    /**
+
      * Saves the modifications of the grades.xml to the
      * same file, basically updates the file.
-     */
+
     private static void saveGradestoXML(ArrayList<Grades> grade, String filepath1)
     {
         try
@@ -600,14 +594,16 @@ public class Main
         }
     }
 
-    /**
+
      * Sub-program of the program, which updates the grades.xml.
      * Creates a child element.
-     */
+
     private static void childElement(Document document, Element par, String tag, String text)
     {
         Element element = document.createElement(tag);
         element.setTextContent(text);
         par.appendChild(element);
     }
+
+ */
 }

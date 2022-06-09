@@ -4,7 +4,7 @@ public class Grades {
     private int Grade;
     private PassOrNot passOrNot;
 
-    public Grades(String Subject, int Credit, int Grade) {
+    public Grades(String Subject, int Credit, int Grade/*, PassOrNot passOrNot*/) {
         this.Subject = Subject;
         this.Credit = Credit;
         this.Grade = Grade;
@@ -37,6 +37,10 @@ public class Grades {
 
     public PassOrNot getPassorNot() {
         return passOrNot;
+    }
+
+    public void setPassOrNot(PassOrNot passOrNot){
+        this.passOrNot = passOrNot;
     }
 
     @Override

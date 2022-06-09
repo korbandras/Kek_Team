@@ -27,16 +27,21 @@ public class Main1 {
 
     //private static final Scanner be = new Scanner(System.in);
     private static final String file = "src/main/resources/grades.xml";
-
     private static final JFrame frame = new JFrame("Átlag és KKI számoló");
 
     public static void main(String[] args) {
         ArrayList<Grades> grades = read(file, frame);
 
+        /**
+         * Panel setup
+         */
         JPanel panel = new JPanel();
         panel.setBounds(new Rectangle());
         panel.setBackground(Color.LIGHT_GRAY);
 
+        /**
+         * Assign buttons and their action listeners, each with different actions
+         */
         JButton button1 = new JButton("List Subjects and Grades");
         button1.addActionListener(new ActionListener() {
             @Override
@@ -94,6 +99,9 @@ public class Main1 {
             }
         });
 
+        /**
+         * Setting button backgrounds
+         */
         button1.setBackground(Color.WHITE);
         button2.setBackground(Color.WHITE);
         button3.setBackground(Color.WHITE);
@@ -102,6 +110,7 @@ public class Main1 {
         button6.setBackground(Color.WHITE);
         button7.setBackground(Color.WHITE);
 
+/*
         button1.setBounds(50,100,50,30);
         button2.setBounds(100,100,50,30);
         button3.setBounds(150,100,50,30);
@@ -109,7 +118,11 @@ public class Main1 {
         button5.setBounds(250,100,50,30);
         button6.setBounds(300,100,50,30);
         button7.setBounds(350,100,50,30);
+*/
 
+        /**
+         * Add buttons to the panel, which is later added to the JFrame
+         */
         panel.add(button1);
         panel.add(button2);
         panel.add(button3);
@@ -118,8 +131,9 @@ public class Main1 {
         panel.add(button6);
         panel.add(button7);
 
-        frame.add(panel);
-
+        /**
+         * Setting up JMenuBar, adding different items and sub lists
+         */
         JMenuBar mb = new JMenuBar();
         JMenu file0 = new JMenu("Fájl");
 
@@ -149,6 +163,9 @@ public class Main1 {
         mb.add(new JMenuItem(""));
         mb.add(new JMenuItem(""));
 
+        /**
+         * Adding the action listeners to MenuItems, each with it's purposed function
+         */
         open.addActionListener(e -> {
             showMessageDialog(frame, "Read completed in the beginning.");
         });
@@ -162,8 +179,7 @@ public class Main1 {
         });
 
         add.addActionListener(e->{
-            Grades newgrade = new Grades(inputSub(), inputCrd(), inputGrd());
-            grades.add(newgrade);
+            grades.add(new Grades(inputSub(), inputCrd(), inputGrd()));
         });
 
         modify.addActionListener(e->{
@@ -184,6 +200,11 @@ public class Main1 {
 
         exit.addActionListener(e -> System.exit(0));
 
+        /**
+         * Final touches on the frame, adding the
+         * forementioned panel, menubar, and smaller adjustments
+         */
+        frame.add(panel);
         frame.setJMenuBar(mb);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -192,12 +213,21 @@ public class Main1 {
         frame.setResizable(false);
     }
 
+    /**
+     * Part of the program, which calculates the KKI
+     * @param frame
+     */
     private static void kkiszam(JFrame frame) {
-        double kki, devider = 30;
-        kki = (sumOfDoneTimesGrade()/devider)*(DoneCrd()/UnderTook());
+        double kki, divider = 30;
+        kki = (sumOfDoneTimesGrade()/divider)*(DoneCrd()/UnderTook());
         showMessageDialog(frame, "Your KKI based on Grades.xml is: " + kki);
     }
 
+    /**
+     * Returns the value of the credits you undertook, double in order,
+     * so later it can make more accurate calculations in kkiszam
+     * @return
+     */
     private static double UnderTook() {
         double undertook = 0;
         try {
@@ -233,6 +263,11 @@ public class Main1 {
         return undertook;
     }
 
+    /**
+     * Returns the value of the credits you completed, double in order,
+     * so later it can make more accurate calculations in kkiszam
+     * @return
+     */
     private static double DoneCrd() {
         double done = 0;
         try {
@@ -272,6 +307,11 @@ public class Main1 {
         return done;
     }
 
+    /**
+     * Returns the sum value the credits times grade, double in order,
+     * so later it can make more accurate calculations in kkiszam
+     * @return
+     */
     private static double sumOfDoneTimesGrade() {
         double sum = 0;
         try {
@@ -309,6 +349,12 @@ public class Main1 {
         return sum;
     }
 
+    /**
+     * The part of the program which modifies the given subject's
+     * credit and grade, uses multiple sub-programs
+     * @param frame
+     * @param grades
+     */
     private static void modifygrades(JFrame frame, ArrayList<Grades> grades) {
         String subj = JOptionPane.showInputDialog("Subject you want to modify: ");
         try {
@@ -321,6 +367,12 @@ public class Main1 {
         }
     }
 
+    /**
+     * The part of the program which deletes the given subject
+     * uses multiple sub-programs
+     * @param frame
+     * @param grades
+     */
     private static void deleteGrade(JFrame frame, ArrayList<Grades> grades) {
         String name = JOptionPane.showInputDialog("Subject you want to delete: ");
         try {
@@ -332,6 +384,14 @@ public class Main1 {
         }
     }
 
+    /**
+     * Smaller program part, finds the given subject in the ArrayList,
+     * it's used in delete and modify programs
+     * @param grade
+     * @param sub
+     * @return
+     * @throws IllegalArgumentException
+     */
     private static Grades findGrade(ArrayList<Grades> grade, String sub) throws IllegalArgumentException {
         for(Grades grades : grade) {
             if(grades.getSubject().equals(sub)) {
@@ -341,11 +401,20 @@ public class Main1 {
         throw new IllegalArgumentException("No subject with given name: " + sub);
     }
 
+    /**
+     * Counts the average of the Grades.xml,
+     * uses 2 subprograms
+     * @param frame
+     */
     private static void avg(JFrame frame) {
         double avg = gradesSum() / gradesNo();
         showMessageDialog(frame, "Average of the grades: " + avg);
     }
 
+    /**
+     * Returns the sum of grades, one of the subprogram of avg
+     * @return
+     */
     private static double gradesSum() {
         double sum = 0;
         try {
@@ -381,6 +450,10 @@ public class Main1 {
         return sum;
     }
 
+    /**
+     * Returns the number of grades, other subprogram of avg
+     * @return
+     */
     private static double gradesNo() {
         double No = 0;
         try {
@@ -414,6 +487,13 @@ public class Main1 {
         return No;
     }
 
+    /**
+     * Reads the contents of grades.xml and returns and ArrayList
+     * which is later used by the other parts of the program
+     * @param file0
+     * @param frame
+     * @return
+     */
     private static ArrayList<Grades> read(String file0, JFrame frame) {
         ArrayList<Grades> grade = new ArrayList<>();
         try {
@@ -454,6 +534,12 @@ public class Main1 {
         return grade;
     }
 
+    /**
+     * Saves the changes of the ArrayList into grades.xml,
+     * uses the childElement
+     * @param grade
+     * @param filepath1
+     */
     private static void saveGradestoXML(ArrayList<Grades> grade, String filepath1) {
         try {
             Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
@@ -478,12 +564,23 @@ public class Main1 {
         }
     }
 
+    /**
+     * Creates childElements for saveGradestoXML
+     * @param document
+     * @param par
+     * @param tag
+     * @param text
+     */
     private static void childElement(Document document, Element par, String tag, String text) {
         Element element = document.createElement(tag);
         element.setTextContent(text);
         par.appendChild(element);
     }
 
+    /**
+     * Subprogram of add new and modify, catches the wrong inputs, adds grade
+     * @return
+     */
     private static int inputGrd() {
         int grd = 0;
         while(grd < 1 || grd > 5) {
@@ -496,9 +593,20 @@ public class Main1 {
                 showMessageDialog(frame, "Grade must be a number");
             }
         }
+        PassOrNot pass;
+        if(grd != 1){
+             pass = PassOrNot.Pass;
+        }
+        else{
+            pass = PassOrNot.DidntPass;
+        }
         return grd;
     }
 
+    /**
+     * Subprogram of add new and modify, catches the wrong inputs, adds credit
+     * @return
+     */
     private static int inputCrd() {
         int crd = Integer.parseInt(JOptionPane.showInputDialog("Enter credit value of new subject: "));
         while(crd < 0 || crd > 9) {
@@ -507,6 +615,10 @@ public class Main1 {
         return crd;
     }
 
+    /**
+     * Subprogram of add new
+     * @return
+     */
     private static String inputSub() {
         String sub = JOptionPane.showInputDialog("Name of new subject: ");
         return sub;

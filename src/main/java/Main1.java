@@ -27,7 +27,7 @@ public class Main1 {
 
     //private static final Scanner be = new Scanner(System.in);
     private static final String file = "src/main/resources/grades.xml";
-    private static final JFrame frame = new JFrame("Átlag és KKI számoló");
+    private static final JFrame frame = new JFrame("Average and KKI calculator");
 
     public static void main(String[] args) {
         ArrayList<Grades> grades = read(file, frame);

@@ -625,15 +625,20 @@ public class Main1 {
      */
     private static int inputGrd() {
         int grd = 0;
-        while(grd < 1 || grd > 5) {
-            grd = Integer.parseInt(JOptionPane.showInputDialog("Enter the grade of the new subject: "));
-            try {
-                if (grd > 5 || grd < 1) {
-                    showMessageDialog(frame, "Grade must be between 1 and 5");
+        try {
+            while (grd < 1 || grd > 5) {
+                grd = Integer.parseInt(JOptionPane.showInputDialog("Enter the grade of the new subject: "));
+                try {
+                    if (grd > 5 || grd < 1) {
+                        showMessageDialog(frame, "Grade must be between 1 and 5");
+                    }
+                } catch (InputMismatchException e) {
+                    showMessageDialog(frame, "Grade must be a number");
                 }
-            } catch (InputMismatchException e) {
-                showMessageDialog(frame, "Grade must be a number");
             }
+        }
+        catch (Exception e){
+            showMessageDialog(frame, e.getMessage());
         }
         return grd;
     }
@@ -643,9 +648,15 @@ public class Main1 {
      * @return
      */
     private static int inputCrd() {
-        int crd = Integer.parseInt(JOptionPane.showInputDialog("Enter credit value of new subject: "));
-        while(crd < 0 || crd > 9) {
-            crd = Integer.parseInt(JOptionPane.showInputDialog("Credit value invalid. Please reenter the value"));
+        int crd = 0;
+        try {
+            crd = Integer.parseInt(JOptionPane.showInputDialog("Enter credit value of new subject: "));
+            while (crd <= 0 || crd > 9) {
+                crd = Integer.parseInt(JOptionPane.showInputDialog("Credit value invalid. Please reenter the value"));
+            }
+        }
+        catch (Exception e){
+            showMessageDialog(frame, e.getMessage());
         }
         return crd;
     }
@@ -655,7 +666,14 @@ public class Main1 {
      * @return
      */
     private static String inputSub() {
-        String sub = JOptionPane.showInputDialog("Name of new subject: ");
+        String sub = new String();
+        try{
+            sub = JOptionPane.showInputDialog("Name of new subject: ");
+
+        }
+        catch (Exception e){
+            showMessageDialog(frame, e.getMessage());
+        }
         return sub;
     }
 }
